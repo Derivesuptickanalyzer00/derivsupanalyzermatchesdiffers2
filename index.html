@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #eaf7f8;
+      flex-direction: column;
+      padding: 10px;
+    }
+    .chart-container {
+      width: 100%;
+      max-width: 90%; /* Adjusted for mobile size */
+      height: 35vh; /* Adjusted for mobile view */
+      margin-bottom: 20px;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Live Chart</h1>
+  <div class="chart-container">
+    <canvas id="dynamicChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('dynamicChart').getContext('2d');
+
+    // Initialize the chart
+    const dynamicChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Entry Spot', 'Point 2', 'Point 3', 'Point 4', 'Exit Spot'], // Example labels
+        datasets: [{
+          label: 'Price',
+          data: [1536, 1535.5, 1535, 1534.5, 1534], // Example data points
+          borderColor: '#62a4ab',
+          backgroundColor: 'rgba(98, 164, 171, 0.2)',
+          borderWidth: 2,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            grid: {
+              color: '#d3e9eb'
+            }
+          },
+          x: {
+            grid: {
+              color: '#d3e9eb'
+            }
+          }
+        }
+      }
+    });
+
+    // Simulate dynamic updates
+    setInterval(() => {
+      const newDataPoint = Math.random() * 1 + 1533.5; // Random data for the chart
+      dynamicChart.data.labels.push(`Point ${dynamicChart.data.labels.length + 1}`);
+      dynamicChart.data.datasets[0].data.push(newDataPoint);
+
+      // Remove old data to keep the chart moving
+      if (dynamicChart.data.labels.length > 6) {
+        dynamicChart.data.labels.shift();
+        dynamicChart.data.datasets[0].data.shift();
+      }
+
+      dynamicChart.update();
+    }, 2000); // Update every 2 seconds
+  </script>
+
+  <h1>Tick Analyzer</h1>
+
+  <div class="container">
+    <!-- Market Selection -->
+    <div class="box">
+      <label for="market">Market</label>
+      <select id="market">
+        <option value="vol10">Volatility Index 10</option>
+        <option value="vol25">Volatility Index 25</option>
+        <option value="vol50">Volatility Index 50</option>
+        <option value="vol75">Volatility Index 75</option>
+        <option value="vol100">Volatility Index 100</option>
+      </select>
+    </div>
+
+    <!-- Trade Type Selection -->
+    <div class="box">
+      <label for="tradeType">Trade Type</label>
+      <select id="tradeType">
+        <option value="riseFall">Rise / Fall</option>
+        <option value="upDown">Up / Down</option>
+        <option value="higherLower">Higher / Lower</option>
+        <option value="touchNoTouch">Touch / No Touch</option>
+         <option value="Matches/Differs">Matches/Differs</option>
+      </select>
+    </div>
+
+    <!-- Stake Input -->
+    <div class="box">
+      <label for="stake">Stake</label>
+      <input type="number" id="stake" placeholder="Enter your stake" />
+    </div>
+
+    <!-- Last Digit Prediction -->
+    <div class="box">
+      <label for="lastDigit">Last Digit Prediction</label>
+      <select id="lastDigit">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+      </select>
+    </div>
+
+    <!-- Moving Candle Balls -->
+    <div class="indicator" id="indicator">
+      <div class="candle green" id="candle1">0%</div>
+      <div class="candle red" id="candle2">0%</div>
+      <div class="candle green" id="candle3">0%</div>
+      <div class="candle red" id="candle4">0%</div>
+      <div class="candle green" id="candle5">0%</div>
+      <div class="candle red" id="candle6">0%</div>
+    </div>
+
+    <!-- Purchase Button -->
+    <button id="purchase">Purchase</button>
+
+    <!-- Result -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const candles = document.querySelectorAll('.candle');
+
+    // Function to update the percentage for each candle
+    function updateCandles() {
+      candles.forEach(candle => {
+        const percentage = Math.floor(Math.random() * 101); // Random percentage between 0 and 100
+        candle.textContent = percentage + '%';
+      });
+    }
+
+    // Update candle percentages every 500ms
+    setInterval(updateCandles, 500);
+
+    const purchaseButton = document.getElementById('purchase');
+    const result = document.getElementById('result');
+
+    // Handle purchase button click
+    purchaseButton.addEventListener('click', () => {
+      const lastDigit = document.getElementById('lastDigit').value;
+      result.textContent = "Processing...";
+
+      setTimeout(() => {
+        const win = Math.random() > 0.5; // Random win/loss
+        result.textContent = win ? `You Win! (Predicted: ${lastDigit})` : `You Lose! (Predicted: ${lastDigit})`;
+        result.style.color = win ? 'green' : 'red';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
