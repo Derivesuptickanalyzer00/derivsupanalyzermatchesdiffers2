@@ -226,3 +226,40 @@
   
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Logout Example</title>
+
+  <script>
+    let timeout;
+    const logoutUrl = "https://lordingpages.site/"; // Change this URL to your login page
+
+    // Function to reset the timeout when the user interacts with the page
+    function resetTimer() {
+      clearTimeout(timeout);
+      timeout = setTimeout(logout, 35000); // 35000 ms = 35 seconds
+    }
+
+    // Function to log out the user and redirect to the login page
+    function logout() {
+      window.location.href = logoutUrl;
+    }
+
+    // Set up event listeners to detect user activity
+    window.onload = function() {
+      resetTimer(); // Start the timer when the page loads
+
+      // Reset the timer on mousemove or keypress events
+      document.onmousemove = resetTimer;
+      document.onkeypress = resetTimer;
+    };
+  </script>
+</head>
+<body>
+  <h1>https://derivesup.shop</h1>
+  <p>https://derivesup.shop/courses/derivesup-analyzer/</p>
+</body>
+</html>
